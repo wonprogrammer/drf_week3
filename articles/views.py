@@ -13,6 +13,7 @@ from articles.serializers import ArticleSerializer, ArticleListSerializer, Artic
 class ArticleView(APIView):
     def get(self, request):
         articles = Article.objects.all( )
+        # ArticleListSerializer 에서 정의된 user가 -> 아래함수에서 인증되려면 serializer 재정의 필요 : ArticleCreateSerializer 
         serializer = ArticleListSerializer(articles, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK )
 
