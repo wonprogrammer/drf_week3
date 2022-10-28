@@ -2,6 +2,8 @@ from rest_framework import status
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from articles.models import Article
+from articles.serializers import ArticleSerializer, ArticleListSerializer
 
 
 # Create your views here.
@@ -10,7 +12,9 @@ from rest_framework.views import APIView
 # 게시글의 전체 리스트(GET) + 게시글 작성하기(POST)
 class ArticleView(APIView):
     def get(self, request):
-        pass
+        articles = Article.objects.all( )
+        serializer = ArticleListSerializer(articles, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK )
 
     def post(self, request):
         pass
