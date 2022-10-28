@@ -28,7 +28,10 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 class mocView(APIView):
-    # permissions.디폴트 퍼미션 모델 중 : IsAdminUser는 로그인 되어있는지 확인할때 사용 
-    permission_classes = [permissions.IsAdminUser]
+    # permissions.디폴트 퍼미션 모델 중 : IsAdminUser는 로그인 되어있는지 확인할때 사용 / IsAuthenticated 는 로그인 된 사용자인지 확인!
+    permission_classes = [permissions.IsAuthenticated]
     def get(self, request):
-        return Response('get 요청')
+        user = request.user
+        user.is_admin = True
+        user.save()
+        return Response("get 요청")
