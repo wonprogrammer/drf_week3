@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 # Create your views here.
 
 
+# 게시글의 전체 리스트(GET) + 게시글 작성하기(POST)
 class ArticleView(APIView):
     def get(self, request):
         pass
