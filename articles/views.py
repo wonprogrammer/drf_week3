@@ -3,7 +3,7 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from articles.models import Article
-from articles.serializers import ArticleSerializer, ArticleListSerializer
+from articles.serializers import ArticleSerializer, ArticleListSerializer, ArticleCreateSerializer
 
 
 # Create your views here.
@@ -17,7 +17,14 @@ class ArticleView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK )
 
     def post(self, request):
-        pass
+        serializer = ArticleCreateSerializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save(user = request.user)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
 
 
 
