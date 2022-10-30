@@ -1,15 +1,33 @@
-from dataclasses import fields
 from rest_framework import serializers
-from articles.models import Article
+from articles.models import Article, Comment
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
+class CommentCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        # fields가 한개더라도 무조건 ',' 붙여줘야 함 -> 안그러면 str로 인식
+        fields = ("content",)
+
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    user = serializers.SerializerMethodField()
+    # 여기서 정의된 user의 email이 위에 user값에 들어가게 된다
+    def get_user(self, obj):
+        return obj.user.email
+
     class Meta:
         model = Article
         fields = '__all__'
 
 
-
+# def post
 class ArticleCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Article
@@ -17,6 +35,7 @@ class ArticleCreateSerializer(serializers.ModelSerializer):
 
 
 
+# def get
 class ArticleListSerializer(serializers.ModelSerializer):
     user = serializers.SerializerMethodField()
     # 여기서 정의된 user의 email이 위에 user값에 들어가게 된다

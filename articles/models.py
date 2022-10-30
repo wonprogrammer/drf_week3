@@ -14,5 +14,20 @@ class Article(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)
 
+    # 좋아요
+    likes = models.ManyToManyField(User, related_name="like_articles")
+
     def __str__(self):
         return str(self.title)
+
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="comment_set")
+    content = models.TextField()
+    create_at = models.DateTimeField(auto_now_add=True)
+    update_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.content)
