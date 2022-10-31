@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from articles import serializers
 from articles.models import Article, Comment
 from articles.serializers import ArticleSerializer, ArticleListSerializer, ArticleCreateSerializer, CommentSerializer, CommentCreateSerializer
+from django.db.models import Q
 
 
 # Create your views here.
@@ -28,6 +29,21 @@ class ArticleView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class FeedView(APIView):
+    permissions_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        q = Q()
+        for user in request.user.followings.all():
+            q.add(Q(user=user), q.OR)
+        feeds = Article.objects.filter(q)
+        serializers = ArticleListSerializer(feeds, many=True)
+        return Response(serializers.data)
+
+
 
 
 
