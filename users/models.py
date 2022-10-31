@@ -42,7 +42,7 @@ class User(AbstractBaseUser):
         unique=True,
     )
     # ManyToManyField에서 "symmetrical"는 상대방과 대칭적인 관계면 True/ 비대칭 즉, 혼자만 팔로우 할 수 있는 관계라면 False로 선언한다.
-    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers')
+    followings = models.ManyToManyField('self', symmetrical=False, related_name='followers', blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
